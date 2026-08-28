@@ -1,0 +1,7 @@
+ DISTRIB_ID='GeeLasOS'
+    DISTRIB_RELEASE='v1.0'
+    DISTRIB_REVISION='R2026.08.27'
+    DISTRIB_CODENAME='GeeLas'
+    DISTRIB_TARGET='armsr/armv8'
+    DISTRIB_DESCRIPTION='GeeLas OS - Custom OpenWrt for B860H'
+    DISTRIB_TAINTS='no-all'
