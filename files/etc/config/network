@@ -1,0 +1,93 @@
+
+config interface 'loopback'
+	option device 'lo'
+	option proto 'static'
+	option ipaddr '127.0.0.1'
+	option netmask '255.0.0.0'
+
+config globals 'globals'
+	option ula_prefix 'fd22:9972:e834::/48'
+	option packet_steering '1'
+
+config device
+	option name 'br-lan'
+	option type 'bridge'
+	list ports 'eth0'
+	list ports 'eth0.10'
+	option ipv6 '0'
+	option multicast '0'
+	option sendredirects '1'
+
+config interface 'lan'
+	option device 'br-lan'
+	option proto 'static'
+	option netmask '255.255.255.0'
+	option ipaddr '192.168.0.118'
+	option multipath 'off'
+	option delegate '0'
+
+config device
+	option name 'eth0'
+	option ipv6 '0'
+	option multicast '0'
+	option sendredirects '1'
+
+config device
+	option name 'eth0.10'
+	option type '8021q'
+	option ifname 'eth0'
+	option vid '10'
+	option ipv6 '0'
+	option multicast '0'
+	option sendredirects '1'
+
+config device
+	option name 'dummy0'
+	option ipv6 '0'
+	option multicast '0'
+	option sendredirects '1'
+
+config interface 'wan2'
+	option proto 'static'
+	option device 'eth0.300'
+	option netmask '255.255.255.0'
+	option multipath 'off'
+	option force_link '0'
+	option ipaddr '192.168.1.150'
+	option gateway '192.168.1.3'
+	option broadcast '192.168.1.20'
+	list dns '8.8.8.8'
+	list dns '8.8.4.4'
+	option metric '20'
+	option delegate '0'
+
+config device
+	option name 'eth0.300'
+	option type '8021q'
+	option ifname 'eth0'
+	option vid '300'
+	option ipv6 '0'
+	option multicast '0'
+
+config interface 'wan1'
+	option proto 'static'
+	option device 'eth0.100'
+	option force_link '0'
+	option ipaddr '192.168.2.151'
+	option netmask '255.255.255.0'
+	option gateway '192.168.2.1'
+	list dns '1.1.1.1'
+	list dns '1.0.0.1'
+	option metric '10'
+	option multipath 'off'
+	option delegate '0'
+	option broadcast '192.168.2.21'
+
+config device
+	option name 'eth0.100'
+	option type '8021q'
+	option ifname 'eth0'
+	option vid '100'
+	option ipv6 '0'
+	option multicast '0'
+
