@@ -14,6 +14,7 @@
 #
 # 1. Applications
 #
+CONFIG_PACKAGE_luci-base=y
 CONFIG_PACKAGE_luci-compat=y
 CONFIG_PACKAGE_luci-mod-admin-full=y
 CONFIG_PACKAGE_luci-app-mwan3=y
