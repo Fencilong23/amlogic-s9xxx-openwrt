@@ -217,10 +217,6 @@ rebuild_firmware() {
         \
         luci-app-amlogic luci-i18n-amlogic-zh-cn \
         \
-         opkg \
-        libustream-openssl \
-        ca-certificates \
-        \
         ${config_list} \
         "
 
