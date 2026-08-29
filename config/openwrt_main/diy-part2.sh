@@ -6,6 +6,13 @@
     sed -i '/prometheus-node-exporter-lua/d' .config
     sed -i '/kmod-dummy/d' .config
 
+# 1. Musnahin paket docker
+sed -i 's/CONFIG_PACKAGE_dockerd=.*/CONFIG_PACKAGE_dockerd=n/g' .config
+sed -i 's/CONFIG_PACKAGE_docker=.*/CONFIG_PACKAGE_docker=n/g' .config
+sed -i 's/CONFIG_PACKAGE_luci-app-dockerman=.*/CONFIG_PACKAGE_luci-app-dockerman=n/g' .config
+sed -i '/docker/d' package/base-files/files/etc/config/fstab
+sed -i '/CONFIG_PACKAGE_luci-i18n-dockerman/d' .config
+
     # ====== SETTING CCACHE BIAR CEPET ======
     sed -i '/CONFIG_DEVEL/d' .config
     sed -i '/CONFIG_CCACHE/d' .config
@@ -18,22 +25,3 @@
     echo "DISTRIB_SOURCEREPO='github.com/openwrt/openwrt'" >>package/base-files/files/etc/openwrt_release
     echo "DISTRIB_SOURCECODE='openwrt'" >>package/base-files/files/etc/openwrt_release
     echo "DISTRIB_SOURCEBRANCH='main'" >>package/base-files/files/etc/openwrt_release
-
-# ====== BOM NUKLIR ANTI DOCKER ======
-echo "=== HAPUS DOCKER DARI AKAR ==="
-
-# 1. Paksa semua varian docker jadi =n
-sed -i 's/CONFIG_PACKAGE_dockerd=.*/CONFIG_PACKAGE_dockerd=n/g' .config
-sed -i 's/CONFIG_PACKAGE_docker=.*/CONFIG_PACKAGE_docker=n/g' .config
-sed -i 's/CONFIG_PACKAGE_luci-app-dockerman=.*/CONFIG_PACKAGE_luci-app-dockerman=n/g' .config
-sed -i 's/CONFIG_PACKAGE_luci-i18n-dockerman-.*/d' .config
-
-# 2. Kalau belum ada, paksa tambahin =n
-grep -q "CONFIG_PACKAGE_dockerd=" .config || echo "CONFIG_PACKAGE_dockerd=n" >> .config
-grep -q "CONFIG_PACKAGE_docker=" .config || echo "CONFIG_PACKAGE_docker=n" >> .config
-grep -q "CONFIG_PACKAGE_luci-app-dockerman=" .config || echo "CONFIG_PACKAGE_luci-app-dockerman=n" >> .config
-
-# 3. Hapus semua bahasa docker biar gak nyampah
-sed -i '/CONFIG_PACKAGE_luci-i18n-dockerman/d' .config
-
-echo "=== DOCKER SUDAH DIMUSNAHKAN ==="
