@@ -228,7 +228,6 @@ rebuild_firmware() {
     echo -e "${INFO} Firmware build completed successfully."
 }
 
-# Custom settings after rebuild
 custom_settings() {
     cd ${imagebuilder_path}
     echo -e "${STEPS} Applying post-build customizations..."
