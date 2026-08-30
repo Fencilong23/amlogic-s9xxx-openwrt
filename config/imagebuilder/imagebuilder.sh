@@ -236,26 +236,6 @@ custom_settings() {
     [[ -d "${tmp_path}" ]] && rm -rf "${tmp_path:?}"/* || mkdir -p "${tmp_path}"
     [[ -d "${output_path}" ]] && rm -rf "${output_path:?}"/* || mkdir -p "${output_path}"
 
-   # ===== BLOK BARU =====
-    if [[ -z "$(ls -1 bin/targets/*/*/*rootfs.tar.gz 2>/dev/null)" ]]; then
-        SQUASHFS="$(find bin/targets -name "rootfs.squashfs" 2>/dev/null | head -n 1)"
-        if [[ -n "${SQUASHFS}" ]]; then
-            mkdir -p "${tmp_path}/unpacked_rootfs"
-            unsquashfs -d "${tmp_path}/unpacked_rootfs" "${SQUASHFS}" -f
-            td="$(basename "$(dirname "$(dirname "${SQUASHFS}")")")"
-            arch="${td#target-}"
-            arch="${arch%%_*}"
-            subtarget="${arch#*_}"
-            subtarget="${subtarget%%_*}"
-            mkdir -p "bin/targets/${arch}/${subtarget}"
-            tar -czpf "bin/targets/${arch}/${subtarget}/rootfs.tar.gz" -C "${tmp_path}/unpacked_rootfs" ./
-            echo -e "${INFO} Created rootfs.tar.gz from ${SQUASHFS}"
-        else
-            error_msg "No rootfs.squashfs found in bin/targets."
-        fi
-    fi
-    # ===== SELESAI =====
-
     # Find the original *rootfs.tar.gz file
     original_archive="$(ls -1 bin/targets/*/*/*rootfs.tar.gz 2>/dev/null | head -n 1)"
 
