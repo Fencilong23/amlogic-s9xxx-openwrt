@@ -237,13 +237,18 @@ custom_settings() {
     [[ -d "${output_path}" ]] && rm -rf "${output_path:?}"/* || mkdir -p "${output_path}"
 
     # ===== TAMBAHKAN BLOK INI =====
-    if [[ -z "$(ls -1 bin/targets///*rootfs.tar.gz 2>/dev/null)" ]]; then
+   # Manually create rootfs.tar.gz if not present
+    if [[ -z "$(ls -1 bin/targets/*/*/*rootfs.tar.gz 2>/dev/null)" ]]; then
         ROOTFS_DIR="$(find build_dir -maxdepth 3 -type d -name "root-*" 2>/dev/null | head -n 1)"
         if [[ -n "${ROOTFS_DIR}" ]]; then
-            TARGET_DIR="$(find bin/targets -maxdepth 2 -type d 2>/dev/null | head -n 1)"
-            mkdir -p "${TARGET_DIR}"
-            tar -czpf "${TARGET_DIR}/rootfs.tar.gz" -C "${ROOTFS_DIR}" ./
-            echo -e "${INFO} Created rootfs.tar.gz from ${ROOTFS_DIR}"
+            td="$(basename "$(dirname "${ROOTFS_DIR}")")"
+            arch="${td#target-}"
+            arch="${arch%%_*}"
+            subtarget="${arch#*_}"
+            subtarget="${subtarget%%_*}"
+            mkdir -p "bin/targets/${arch}/${subtarget}"
+            tar -czpf "bin/targets/${arch}/${subtarget}/rootfs.tar.gz" -C "${ROOTFS_DIR}" ./
+            echo -e "${INFO} Created rootfs.tar.gz at bin/targets/${arch}/${subtarget}/"
         else
             error_msg "No rootfs directory found in build_dir."
         fi
