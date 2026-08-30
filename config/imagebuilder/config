@@ -14,6 +14,7 @@
 #
 # 1. Applications
 #
+CONFIG_TARGET_ROOTFS_TARGZ=y
 CONFIG_PACKAGE_opkg=y
 CONFIG_PACKAGE_luci-ssl=y
 CONFIG_PACKAGE_luci-app-mwan3=y
