@@ -267,10 +267,11 @@ custom_settings() {
             if [[ ! -f "${ROOTFS_DIR}/etc/openwrt_release" ]]; then
                 mkdir -p "${ROOTFS_DIR}/etc"
                 echo "DISTRIB_ID='OpenWrt'" > "${ROOTFS_DIR}/etc/openwrt_release"
-                echo "DISTRIB_RELEASE='24.10.2'" >> "${ROOTFS_DIR}/etc/openwrt_release"
+                echo "DISTRIB_RELEASE='25.12.5'" >> "${ROOTFS_DIR}/etc/openwrt_release"
                 echo "DISTRIB_CODENAME='custom'" >> "${ROOTFS_DIR}/etc/openwrt_release"
                 echo "DISTRIB_TARGET='${arch}/${subtarget}'" >> "${ROOTFS_DIR}/etc/openwrt_release"
             fi
+            mkdir -p "${ROOTFS_DIR}/lib/modules"
             tar -czpf "bin/targets/${arch}/${subtarget}/rootfs.tar.gz" -C "${ROOTFS_DIR}" ./
             echo -e "${INFO} Created rootfs.tar.gz at bin/targets/${arch}/${subtarget}/"
         else
