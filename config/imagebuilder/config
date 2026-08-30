@@ -14,7 +14,6 @@
 #
 # 1. Applications
 #
-CONFIG_PACKAGE_luci-base=y
 CONFIG_PACKAGE_luci-app-system=y
 CONFIG_PACKAGE_luci-app-opkg=y
 CONFIG_PACKAGE_luci-ssl=y
