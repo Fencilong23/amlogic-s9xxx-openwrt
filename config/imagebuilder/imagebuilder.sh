@@ -236,49 +236,25 @@ custom_settings() {
     [[ -d "${tmp_path}" ]] && rm -rf "${tmp_path:?}"/* || mkdir -p "${tmp_path}"
     [[ -d "${output_path}" ]] && rm -rf "${output_path:?}"/* || mkdir -p "${output_path}"
 
-    # ===== TAMBAHKAN BLOK INI =====
-   # Manually create rootfs.tar.gz if not present
+   # ===== BLOK BARU =====
     if [[ -z "$(ls -1 bin/targets/*/*/*rootfs.tar.gz 2>/dev/null)" ]]; then
-        ROOTFS_DIR="$(find build_dir -maxdepth 3 -type d -name "root-*" 2>/dev/null | head -n 1)"
-        if [[ -n "${ROOTFS_DIR}" ]]; then
-            td="$(basename "$(dirname "${ROOTFS_DIR}")")"
+        SQUASHFS="$(find bin/targets -name "rootfs.squashfs" 2>/dev/null | head -n 1)"
+        if [[ -n "${SQUASHFS}" ]]; then
+            mkdir -p "${tmp_path}/unpacked_rootfs"
+            unsquashfs -d "${tmp_path}/unpacked_rootfs" "${SQUASHFS}" -f
+            td="$(basename "$(dirname "$(dirname "${SQUASHFS}")")")"
             arch="${td#target-}"
             arch="${arch%%_*}"
             subtarget="${arch#*_}"
             subtarget="${subtarget%%_*}"
             mkdir -p "bin/targets/${arch}/${subtarget}"
-            tar -czpf "bin/targets/${arch}/${subtarget}/rootfs.tar.gz" -C "${ROOTFS_DIR}" ./
-            echo -e "${INFO} Created rootfs.tar.gz at bin/targets/${arch}/${subtarget}/"
+            tar -czpf "bin/targets/${arch}/${subtarget}/rootfs.tar.gz" -C "${tmp_path}/unpacked_rootfs" ./
+            echo -e "${INFO} Created rootfs.tar.gz from ${SQUASHFS}"
         else
-            error_msg "No rootfs directory found in build_dir."
+            error_msg "No rootfs.squashfs found in bin/targets."
         fi
     fi
     # ===== SELESAI =====
-     # ===== BLOK BARU (ditambahkan) =====
-    if [[ -z "$(ls -1 bin/targets///*rootfs.tar.gz 2>/dev/null)" ]]; then
-        ROOTFS_DIR="$(find build_dir -maxdepth 3 -type d -name "root-*" 2>/dev/null | head -n 1)"
-        if [[ -n "${ROOTFS_DIR}" ]]; then
-            td="$(basename "$(dirname "${ROOTFS_DIR}")")"
-            arch="${td#target-}"
-            arch="${arch%%_*}"
-            subtarget="${arch#*_}"
-            subtarget="${subtarget%%_*}"
-            mkdir -p "bin/targets/${arch}/${subtarget}"
-            if [[ ! -f "${ROOTFS_DIR}/etc/openwrt_release" ]]; then
-                mkdir -p "${ROOTFS_DIR}/etc"
-                echo "DISTRIB_ID='OpenWrt'" > "${ROOTFS_DIR}/etc/openwrt_release"
-                echo "DISTRIB_RELEASE='25.12.5'" >> "${ROOTFS_DIR}/etc/openwrt_release"
-                echo "DISTRIB_CODENAME='custom'" >> "${ROOTFS_DIR}/etc/openwrt_release"
-                echo "DISTRIB_TARGET='${arch}/${subtarget}'" >> "${ROOTFS_DIR}/etc/openwrt_release"
-            fi
-            mkdir -p "${ROOTFS_DIR}/lib/modules"
-            tar -czpf "bin/targets/${arch}/${subtarget}/rootfs.tar.gz" -C "${ROOTFS_DIR}" ./
-            echo -e "${INFO} Created rootfs.tar.gz at bin/targets/${arch}/${subtarget}/"
-        else
-            error_msg "No rootfs directory found in build_dir."
-        fi
-    fi
-    # ===== SELESAI BLOK BARU =====
 
     # Find the original *rootfs.tar.gz file
     original_archive="$(ls -1 bin/targets/*/*/*rootfs.tar.gz 2>/dev/null | head -n 1)"
