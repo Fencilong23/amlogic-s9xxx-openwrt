@@ -237,6 +237,20 @@ custom_settings() {
     [[ -d "${tmp_path}" ]] && rm -rf "${tmp_path:?}"/* || mkdir -p "${tmp_path}"
     [[ -d "${output_path}" ]] && rm -rf "${output_path:?}"/* || mkdir -p "${output_path}"
 
+    # ===== TAMBAHKAN BLOK INI =====
+    if [[ -z "$(ls -1 bin/targets///*rootfs.tar.gz 2>/dev/null)" ]]; then
+        ROOTFS_DIR="$(find build_dir -maxdepth 3 -type d -name "root-*" 2>/dev/null | head -n 1)"
+        if [[ -n "${ROOTFS_DIR}" ]]; then
+            TARGET_DIR="$(find bin/targets -maxdepth 2 -type d 2>/dev/null | head -n 1)"
+            mkdir -p "${TARGET_DIR}"
+            tar -czpf "${TARGET_DIR}/rootfs.tar.gz" -C "${ROOTFS_DIR}" ./
+            echo -e "${INFO} Created rootfs.tar.gz from ${ROOTFS_DIR}"
+        else
+            error_msg "No rootfs directory found in build_dir."
+        fi
+    fi
+    # ===== SELESAI =====
+
     # Find the original *rootfs.tar.gz file
     original_archive="$(ls -1 bin/targets/*/*/*rootfs.tar.gz 2>/dev/null | head -n 1)"
 
