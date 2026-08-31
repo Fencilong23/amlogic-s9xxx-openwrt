@@ -295,7 +295,7 @@ on:
         default: "ophub/kernel"
         type: choice
         options:
-          - ophub/kernel
+          - GeeLas/kernel
       kernel_usage:
         description: "Set the tags of the stable kernel."
         required: false
@@ -317,7 +317,7 @@ on:
         options:
           - ophub
           - angel
-          - GeeLasV2
+          - GeeLas
 
 env:
   TZ: Etc/UTC
